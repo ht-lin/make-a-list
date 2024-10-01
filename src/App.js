@@ -7,9 +7,15 @@ import Lists from "./Lists";
 import { nanoid } from "nanoid";
 
 
+function getLocalStorage() {
+  const localLists = localStorage.getItem("lists");
+
+  return localLists ? JSON.parse(localLists) : [];
+}
+
 function App() {
 
-  const [lists, setLists] = useState( [] );
+  const [lists, setLists] = useState( getLocalStorage() );
   const [list, setList] = useState( {
     id: nanoid(),
     title: "",
@@ -23,6 +29,15 @@ function App() {
         : setLists( pre => [...pre, list] );
     }
   }, [list] );
+
+  useEffect( () => {
+    localStorage.setItem("lists", JSON.stringify(lists));
+
+    lists.find( item => item.id === list.id ) ?
+      setList(lists.find(item => item.id === list.id)) :
+      setList({ id: nanoid(), title: "", items: []});
+
+  }, [lists] );
 
   function editList(id, title, items) {
     setList( { id, title, items });
