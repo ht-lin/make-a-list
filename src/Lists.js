@@ -37,6 +37,16 @@ export default function Lists( {lists, delList, editList, editListTitle} ) {
     }
   }
 
+  function allItemsFinished(id) {
+    const list = lists.find( list => list.id === id );
+
+    if(list.items.length !== 0) {
+      return list.items.every( item => item.finished === true );
+    } else {
+      return false;
+    }
+  }
+
   return (
     <Col md={5} lg={4} >
       <div className="bg-secondary-subtle text-center p-2 fw-bolder">All Lists</div>
@@ -45,7 +55,11 @@ export default function Lists( {lists, delList, editList, editListTitle} ) {
           lists.map( list => {
             return(
               <ListGroup.Item key={list.id} className="d-flex justify-content-between" action>
-                <div className="me-auto" onClick={() => selectedList(list.id)} >{list.title}</div>
+                <div 
+                  className="me-auto" 
+                  style={{ textDecoration: allItemsFinished(list.id) ? "line-through" : "none" }}
+                  onClick={() => selectedList(list.id)} 
+                >{list.title}</div>
                 <Stack direction="horizontal">
                   <MdEdit 
                     className="text-primary me-2" 
