@@ -5,6 +5,8 @@ import Stack from "react-bootstrap/Stack";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Accordion from "react-bootstrap/Accordion";
+import Badge from "react-bootstrap/Badge";
 import { MdEdit, MdDelete } from "react-icons/md";
 
 export default function Lists( {lists, delList, editList, editListTitle} ) {
@@ -49,34 +51,40 @@ export default function Lists( {lists, delList, editList, editListTitle} ) {
 
   return (
     <Col md={5} lg={4} >
-      <div className="bg-secondary-subtle text-center p-2 fw-bolder">All Lists</div>
-      <ListGroup>
-        {(lists.length !== 0) &&
-          lists.map( list => {
-            return(
-              <ListGroup.Item key={list.id} className="d-flex justify-content-between" action>
-                <div 
-                  className="me-auto" 
-                  style={{ textDecoration: allItemsFinished(list.id) ? "line-through" : "none" }}
-                  onClick={() => selectedList(list.id)} 
-                >{list.title}</div>
-                <Stack direction="horizontal">
-                  <MdEdit 
-                    className="text-primary me-2" 
-                    style={{ cursor: "pointer" }} 
-                    onClick={ () => editTitle(list.id) }
-                  />
-                  <MdDelete 
-                    className="text-danger" 
-                    style={{ cursor: "pointer" }} 
-                    onClick={ () => delList(list.id) }
-                  />
-                </Stack>
-              </ListGroup.Item>
-            )
-          } )
-        }
-      </ListGroup>
+      <Accordion>
+        <Accordion.Item eventKey="0">
+          <Accordion.Header >My Lists     <Badge pill bg="primary" className="ms-3">{lists.length}</Badge></Accordion.Header>
+          <Accordion.Body>
+            <ListGroup variant="flush">
+              {(lists.length !== 0) &&
+                lists.map( list => {
+                  return(
+                    <ListGroup.Item key={list.id} className="d-flex justify-content-between" action>
+                      <div 
+                        className="me-auto" 
+                        style={{ textDecoration: allItemsFinished(list.id) ? "line-through" : "none" }}
+                        onClick={() => selectedList(list.id)} 
+                      >{list.title}</div>
+                      <Stack direction="horizontal">
+                        <MdEdit 
+                          className="text-primary me-2" 
+                          style={{ cursor: "pointer" }} 
+                          onClick={ () => editTitle(list.id) }
+                        />
+                        <MdDelete 
+                          className="text-danger" 
+                          style={{ cursor: "pointer" }} 
+                          onClick={ () => delList(list.id) }
+                        />
+                      </Stack>
+                    </ListGroup.Item>
+                  )
+                } )
+              }
+            </ListGroup>
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
       { showEditTitle &&
         <Modal show={showEditTitle} onHide={() => { setShowEditTitle(false); setEditInputText(""); }}>
           <Modal.Body>
